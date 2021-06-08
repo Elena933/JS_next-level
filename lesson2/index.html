@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class Person {
+            name;
+            year;
+    
+            constructor(name, year) {
+                this.name = name;
+                this.year = year;
+
+            }
+            calcAge() {
+                console.log(new Date().getFullYear() - this.year)
+            }
+            sayHi() {
+            return `${this.name} say hi`;
+            }
+        }
+
+        
+
+        
+
+
+        class Teacher extends Person {
+            constructor(name, year, subject) {
+                super(name, year);
+                this.subject = subject;
+            }
+
+            sayHi() {
+                return `${super.sayHi()} as teacher`
+            }
+
+        }
+
+
+        let john = new Person("Jogn", 1993);
+        let ann = new Teacher("Ann", 2000, "math")
+
+
+    </script>
+</body>
+
+</html>
