@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p id="text">
+        Laurie: 'So, what are your plans for this weekend?'
+        Christie: 'I don't know. Do you want to get together or something?'
+        Sarah: 'How about going to see a movie? Cinemax 26 on Carson Boulevard is showing Enchanted'.
+        Laurie: 'That sounds like a good idea. Maybe we should go out to eat beforehand'.
+        Sarah: 'It's  fine with me. Where do you want to meet'?
+        Christie: 'Let's meet at Summer Pizza House. I h've not gone there for a long time'.
+    </p>
+    <button id="replace">replace</button>
+    <script>
+        "use strict"
+
+        let context = document.getElementById('text');
+        document.getElementById('replace').addEventListener('click', () => {
+            context.textContent = context.textContent.replace(/'/g, '"');
+        });
+
+    </script>
+</body>
+
+</html>
