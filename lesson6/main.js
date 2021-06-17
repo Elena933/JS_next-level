@@ -1,0 +1,139 @@
+  
+Vue.component('goods-list', {
+    template: `
+        <div class="goods-list">
+            <goods-item v-for="good in goods" :good="good"></goods-item>
+        </div>
+    `,
+    props: ['goods'],
+});
+
+Vue.component('cart-list', {
+    template: `
+        <div class="cart-list">
+            <cart-item v-for="good in goods" :good="good"></cart-item>
+        </div>
+    `,
+    props: ['goods'],
+});
+
+Vue.component('goods-item', {
+    template: `
+        <div class="goods-item">
+            <img src="img/noimage.png" alt="preview">
+            <h3>{{ good.product_name }}</h3>
+            <p>{{ good.price }}</p>
+            <button class="goods-item__add-to-cart" @click="$parent.$parent.addToCart(good)">
+                <i class="fas fa-shopping-cart"></i> add to cart
+            </button>
+        </div>
+    `,
+    props: ['good'],
+});
+
+Vue.component('cart-item', {
+    template: `
+        <div class="cart-item">
+            <img src="img/noimage.png" alt="preview">
+            <h3>{{ good.product_name }}</h3>
+            <p>{{ good.totalPrice }}</p>
+            <p>{{ good.count }} шт.</p>
+            <button class="cart-item__remove-from-cart" @click="$parent.$parent.removeFromCart(good)">
+                <i class="fas fa-shopping-cart"></i> remove
+            </button>
+        </div>
+    `,
+    props: ['good'],
+});
+
+Vue.component('cart-button', {
+    template: `
+        <button class="cart-button" type="button" @click="$parent.showCart"><i class="fas fa-shopping-cart"></i>
+            <div>корзина</div>
+            <div class="cart-size" v-if="$parent.shopCart.length!=0">{{ size }}</div>
+        </button>
+    `,
+    props: ['size'],
+})
+
+Vue.component('search', {
+    template: `
+        <div>
+            <input type="text" class="goods-search" v-model="$parent.searchLine">
+            <button class="search-button" type="button" @click="handler()"><i class="fas fa-search"></i></button>
+        </div>
+    `,
+    props: ['handler'],
+})
+
+
+
+const app = new Vue({
+    el: '#app',
+    data: {
+        goods: [],
+        filteredGoods: [],
+        isVisibleCart: true,
+        isVisibleCatalog: true,
+        shopCart: [],
+        searchLine: '',
+    },
+    methods: {
+        async fetch() {
+            let response = await fetch('https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses/catalogData.json');
+            let listJSON = await response.json();
+            this.goods = await listJSON;
+            this.filteredGoods = await listJSON;
+        },
+
+        filterGoods() {
+            this.filteredGoods = this.goods.filter((product) => {
+                return product.product_name.toLowerCase().includes(this.searchLine.toLowerCase());
+            });
+        },
+
+        addToCart(good) {
+            this.shopCart.splice(this.shopCart.length, 0, good.id_product);
+        },
+
+        removeFromCart(good) {
+            let id = this.shopCart.indexOf(good.id_product);
+            this.shopCart.splice(id, 1);
+
+        },
+
+        showCart() {
+            this.isVisibleCart = true;
+            this.isVisibleCatalog = false;
+        },
+    },
+    computed: {
+        shopCartSize() {
+            return this.shopCart.length;
+        },
+
+        renderCart() {
+            let count = this.shopCart.length;
+            let result = [];
+
+            for (let i = 0; i < count; i++) {
+                let good = this.goods.find(item => item.id_product == this.shopCart[i]);
+
+                if ( result.includes(good) ) {
+                    let index = result.indexOf(good);
+                    result[index].count++;
+                    result[index].totalPrice = result[index].price * result[index].count;
+                } else {
+                    good.count = 1;
+                    good.totalPrice = good.price * good.count;
+                    result.push(good);
+                } 
+            }
+
+            return result;
+        }
+    },
+    async mounted() {
+        await this.fetch();
+    }
+});

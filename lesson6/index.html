@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eShop</title>
+    <link rel="stylesheet" href="../lesson6/style.css">
+
+    <script src="https://kit.fontawesome.com/4f05b53706.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="app">
+        <header class="header container">
+            <div class="logo">E-shop</div>
+            <search :handler="filterGoods"></search>
+            <cart-button :size="shopCartSize"></cart-button>
+        </header>
+        <main class="container">
+
+            <div v-if="isVisibleCatalog">
+                <goods-list :goods="filteredGoods"></goods-list>
+            </div>
+
+            <div v-if="isVisibleCart">
+                <cart-list :goods="renderCart"></cart-list>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js">
+    </script>
+    <script src="../lesson6/main.js"></script>
+</body>
+
+</html>
